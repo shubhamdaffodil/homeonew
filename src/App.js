@@ -1,13 +1,22 @@
+import './App.css'
 import logo from './logo.svg';
-import './App.css';
+import { useEffect } from 'react';
+
+
+
 
 function App() {
+  const UPDATE_CHECK_INTERVAL = 1 * 60 * 1000
+  useEffect(() => {
+ 
+  }, [UPDATE_CHECK_INTERVAL])
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-        Chal Gya Sala.
+          Chalega Gya Sala.
         </p>
         <a
           className="App-link"

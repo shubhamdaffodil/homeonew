@@ -3,11 +3,29 @@ const path = require('path');
 
 
 require('update-electron-app')
-const server = 'homeonew-fnzkzncji-shubhamdaffodil.vercel.app'
-const url = `${server}/${app.getVersion()}`
+const { app, autoUpdater,dialog } = require("electron");
 
-console.log(url)
+const server = 'https://your-deployment-url.com'
+const url = `${server}/update/${process.platform}/${app.getVersion()}`
 autoUpdater.setFeedURL({ url })
+setInterval(() => {
+  autoUpdater.checkForUpdates()
+}
+
+  , UPDATE_CHECK_INTERVAL)
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    title: 'Application Update',
+    message: process.platform === 'win32' ? releaseNotes : releaseName,
+    detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+  }
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) autoUpdater.quitAndInstall()
+  })
+})
+
 function createWindow () {
   const win = new BrowserWindow({
     width: 800,
