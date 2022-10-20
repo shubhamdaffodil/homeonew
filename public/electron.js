@@ -6,21 +6,24 @@ const path = require('path');
 
 async function createWindow() {
   const win = new BrowserWindow({
+    show: false,
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
+      preload: path.join(__dirname, 'preload.js'),
+      devtool: true
+    },
+    backgroundColor: "red"
   })
   const { machineIdSync } = require("node-machine-id");
   const machine_id = await machineIdSync({ original: true });
   win.webContents.once("dom-ready", () => {
+    win.show()
     win.webContents.executeJavaScript(`localStorage.setItem('token','${machine_id}')`)
 
   })
-
-    startUrl = "http://18.222.189.127:3006/"
-    win.loadURL(startUrl)
+  startUrl = "http://localhost:3000"
+  win.loadURL(startUrl)
 }
 
 app.whenReady().then(() => {
