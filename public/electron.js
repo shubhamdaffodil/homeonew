@@ -1,43 +1,62 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
-const path = require('path');
-
-
-
+const { app, BrowserWindow, ipcMain } = require("electron");
+const url = require("url");
+const path = require("path");
 
 async function createWindow() {
+  const loadingwin = new BrowserWindow({
+    width: 350,
+    height: 350,
+    transparent: true,
+    frame: false,
+    center: true,
+    resizable: false,
+  });
+
+  const loadingScreen = url.format({
+    pathname: path.join(__dirname, "loading.html"),
+    protocol: "file:",
+    slashes: true,
+  });
+
+  loadingwin.loadURL(loadingScreen);
   const win = new BrowserWindow({
     show: false,
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      devtool: true
+      preload: path.join(__dirname, "preload.js"),
+      devtool: true,
     },
-    backgroundColor: "red"
-  })
+  });
+  if (process.platform !== "darwin") {
+    win.setMenuBarVisibility(false);
+  }
   const { machineIdSync } = require("node-machine-id");
   const machine_id = await machineIdSync({ original: true });
   win.webContents.once("dom-ready", () => {
-    win.show()
-    win.webContents.executeJavaScript(`localStorage.setItem('token','${machine_id}')`)
-
-  })
-  startUrl = "http://localhost:3000"
-  win.loadURL(startUrl)
+    loadingwin.close();
+    win.maximize();
+    win.show();
+    win.webContents.executeJavaScript(
+      `localStorage.setItem('token','${machine_id}')`
+    );
+  });
+  startUrl = "http://18.222.189.127:3006";
+  win.loadURL(startUrl);
 }
 
 app.whenReady().then(() => {
-  createWindow()
+  createWindow();
 
-  app.on('activate', () => {
+  app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
+      createWindow();
     }
-  })
-})
+  });
+});
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
   }
-})
+});
