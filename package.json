@@ -1,5 +1,5 @@
 {
-  "name": "SHS-lite",
+  "name": "SHS-Browser",
   "version": "0.1.1",
   "private": true,
   "dependencies": {
@@ -30,15 +30,17 @@
       }
     ],
     "win": {
-      "target": "nsis"
+      "target": [
+        {
+          "target": "nsis"
+        }
+      ],
+      "icon": "src/assets/img/logo.ico"
     },
     "nsis": {
-      "oneClick": true,
-      "perMachine": false,
-      "deleteAppDataOnUninstall": true,
-      "allowToChangeInstallationDirectory": false,
-      "runAfterFinish": true,
-      "differentialPackage": true
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false,
+      "installerIcon": "src/assets/img/logo.ico"
     }
   },
   "devDependencies": {

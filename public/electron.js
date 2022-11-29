@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const url = require("url");
 const path = require("path");
 
+let PreventClose = true;
 async function createWindow() {
   const loadingwin = new BrowserWindow({
     width: 350,
@@ -40,6 +41,18 @@ async function createWindow() {
     win.webContents.executeJavaScript(
       `localStorage.setItem('token','${machine_id}')`
     );
+  });
+
+  ipcMain.on("close-window", (event, data) => {
+    PreventClose = data;
+    win.close();
+  });
+  win.on("close", (event, data) => {
+    if (PreventClose) {
+      event.preventDefault();
+      PreventClose = false;
+      win && win.webContents.send("checkData");
+    }
   });
   startUrl = "http://18.222.189.127:3006";
   win.loadURL(startUrl);
