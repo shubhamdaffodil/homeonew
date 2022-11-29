@@ -18,6 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "pack": "export CSC_LINK=file://shs_dev_id_app.p12 && export CSC_KEY_PASSWORD=shs@apple_9467![GESON && electron-builder ",
     "dist": "electron-builder",
     "publish": "electron-builder --win -p always"
   },
@@ -37,11 +38,29 @@
       ],
       "icon": "src/assets/img/logo.ico"
     },
+    "mac": {
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "target": [
+        "dmg"
+      ],
+      "publish": {
+        "provider": "github",
+        "token": "5b6172f4036a908f5e9b9f6f6f0c0f492d36d5e3"
+      },
+      "icon": "src/assets/img/logo.ico"
+    },
+  
     "nsis": {
       "allowToChangeInstallationDirectory": true,
       "oneClick": false,
       "installerIcon": "src/assets/img/logo.ico"
-    }
+    },
+    "files": [
+      "entitlements.mac.plist"
+    ]
   },
   "devDependencies": {
     "electron": "^21.0.1",
