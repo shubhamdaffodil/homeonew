@@ -26,7 +26,7 @@ async function createWindow() {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      devtool: true,
+      devtool: false,
     },
   });
   if (process.platform !== "darwin") {
@@ -42,6 +42,9 @@ async function createWindow() {
       `localStorage.setItem('token','${machine_id}')`
     );
   });
+  win.webContents.session.on("will-download", (event, item, webContents) => {
+    item.setSavePath(`${app.getPath("downloads")}\\${item.getFilename()}`)
+  })
 
   ipcMain.on("close-window", (event, data) => {
     PreventClose = data;
