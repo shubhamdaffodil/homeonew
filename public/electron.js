@@ -1,8 +1,10 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const url = require("url");
 const path = require("path");
 
 let PreventClose = true;
+let downloadPath = "";
+
 async function createWindow() {
   const loadingwin = new BrowserWindow({
     width: 350,
@@ -27,8 +29,8 @@ async function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       devTools: false,
-      nodeIntegration:    true,
-      contextIsolation:   true,
+      nodeIntegration: true,
+      contextIsolation: true,
     },
   });
   if (process.platform !== "darwin") {
@@ -45,8 +47,25 @@ async function createWindow() {
     );
   });
   win.webContents.session.on("will-download", (event, item, webContents) => {
-    item.setSavePath(`${app.getPath("downloads")}\\${item.getFilename()}`)
-  })
+    const fileName = item.getFilename();
+    if (fileName.includes("index-i")) {
+      let path;
+      if (fileName.includes("index-i0")) {
+        path = dialog.showOpenDialogSync({
+          message: "Select/create folder for backup location",
+          properties: ["openDirectory", "createDirectory", "promptToCreate"],
+          buttonLabel: "Backup",
+        })[0];
+
+        downloadPath = path;
+      } else {
+        path = downloadPath;
+      }
+      path = `${path}\\${item.getFilename()}`;
+      path = path.slice(0, path.indexOf("index-i"));
+      item.setSavePath(path);
+    }
+  });
 
   ipcMain.on("close-window", (event, data) => {
     PreventClose = data;
