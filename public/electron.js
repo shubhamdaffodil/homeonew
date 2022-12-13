@@ -78,7 +78,7 @@ async function createWindow() {
       win && win.webContents.send("checkData");
     }
   });
-  startUrl = "http://18.222.189.127:3006";
+  startUrl = "https://web.synergy-homeopathic.com/";
   win.loadURL(startUrl);
 }
 
