@@ -70,7 +70,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "^101.0.1",
+    "electron": "^10.0.1",
     "electron-builder": "^23.3.3"
   },
   "eslintConfig": {
