@@ -33,7 +33,7 @@ async function createWindow() {
       nodeIntegrationInWorker: true,
       enableRemoteModule: true,
       plugins: true,
-      contextIsolation: false,
+      contextIsolation: true,
       webSecurity: false,
     },
   });
@@ -63,13 +63,13 @@ ipcMain.on("close-window", (event, data) => {
       win && win.webContents.send("checkData");
     }
   });
-  // startUrl = "http://localhost:3000/";
+  // const startUrl = "http://localhost:3000/";
   // startUrl = "http://13.58.158.167:3006/";
   // startUrl = "http://18.117.138.112:3000/";
   // startUrl = "http://43.205.111.78:3000/";
   // startUrl = "https://web.synergy-homeopathi.com/";
-  startUrl = "https://deweb.synergy-homeopathic.com/";
-  // startUrl = "https://en.synergy-homeopathic.com/";
+  // startUrl = "https://deweb.synergy-homeopathic.com/";
+  const startUrl = "https://en.synergy-homeopathic.com/";
   win.loadURL(startUrl);
 }
 
